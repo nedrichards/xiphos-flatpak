@@ -1,0 +1,165 @@
+{
+    "id": "com.github.crosswire.Xiphos",
+    "base-version": "master",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "3.24",
+    "sdk": "org.gnome.Sdk",
+    "command": "xiphos",
+    "rename-desktop-file": "xiphos.desktop",
+    "rename-icon": "xiphos",
+    "copy-icon": true,
+    "rename-appdata-file": "xiphos.appdata.xml",
+    "finish-args": [
+        /* X11 + XShm access */
+        "--share=ipc", "--socket=x11",
+        "--socket=wayland",
+        /* Audio output */
+        "--socket=pulseaudio",
+        /* We want full fs access */
+        "--filesystem=home",
+        "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+        /* Allow communication with network */
+        "--share=network"
+    ],
+    "cleanup": [ "/cache",
+                 "/share/aclocal",
+                 "/lib/systemd",
+                 "*.la", "*.a" ],
+    "build-options" : {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "V": "1"
+        }
+    },
+    "modules": [
+	{
+            "name": "libgsf",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://ftp.gnome.org/pub/gnome/sources/libgsf/1.14/libgsf-1.14.41.tar.xz",
+                    "sha256": "150b98586a1021d5c49b3d4d065d0aa3e3674ae31db131af5372499d2d3f08d3"
+                }
+            ]
+        },
+        {
+            "name": "gconf",
+            "config-opts": [ "--disable-static", "--disable-gtk-doc", "--disable-orbit",
+                             "--disable-introspection" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/GConf/3.2/GConf-3.2.6.tar.xz",
+                    "sha256": "1912b91803ab09a5eed34d364bf09fe3a2a9c96751fde03a4e0cfa51a04d784c"
+                }
+            ]
+        },
+	{
+            "name": "libsigc++",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.10/libsigc++-2.10.0.tar.xz",
+                    "sha256": "f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81"
+                }
+            ]
+        },
+        {
+            "name": "glibmm",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.51/glibmm-2.51.7.tar.xz",
+                    "sha256": "db67cc77f772fb8c727885b39ad6669ecb309cc72f7d76c25753a5c049dfb5f8"
+                }
+            ]
+        },
+	{
+            "name": "gconfmm",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/gconfmm/2.28/gconfmm-2.28.3.tar.xz",
+                    "sha256": "d7bd2d29c1a87b85329547fb29a0eca52d944e60699982152775002e24c09228"
+                }
+            ]
+        },
+	{
+            "name": "biblesync",
+	    "buildsystem": "cmake",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/karlkleinpaste/biblesync.git",
+                    "commit": "6fbdbd60061ff960f0f934b02ec8e3b37ac1dc76"
+                }
+            ]
+        },
+	{
+            "name": "sword",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/bibletime/crosswire-sword-mirror.git",
+                    "commit": "2db50bb38ac0a789737b7974d9b8b8174c25ad03"
+                }
+            ]
+        },
+	{
+            "name": "rarian",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://rarian.freedesktop.org/Releases/rarian-0.8.1.tar.bz2",
+                    "sha256": "aafe886d46e467eb3414e91fa9e42955bd4b618c3e19c42c773026b205a84577"
+                }
+            ]
+        },
+	{
+            "name": "libgtkhtml4",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/gtkhtml/4.10/gtkhtml-4.10.0.tar.xz",
+                    "sha256": "ca3b6424fb2c7ac5d9cb8fdafb69318fa2e825c9cf6ed17d1e38d9b29e5606c3"
+                }
+            ]
+        },
+	{
+            "name": "gnome-doc-utils",
+	    "buildsystem": "autotools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/gnome-doc-utils/0.20/gnome-doc-utils-0.20.10.tar.xz",
+                    "sha256": "cb0639ffa9550b6ddf3b62f3b1add92fb92ab4690d351f2353cffe668be8c4a6"
+                }
+            ]
+        },
+	{
+            "name": "xiphos",
+	    "buildsystem": "simple",
+	    "build-commands": [
+		"./waf configure --prefix=/app  --gtk=3 --enable-webkit2 --debug-level=optimized",
+		"./waf build",
+		"./waf install"
+		],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/crosswire/xiphos.git",
+                    "commit": "40990c48428c2483c079b972dc98bc6097039bd7"
+                }
+            ]
+        }
+    ]
+}
