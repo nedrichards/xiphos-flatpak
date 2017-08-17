@@ -11,35 +11,22 @@
     "finish-args": [
         /* X11 + XShm access */
         "--share=ipc", "--socket=x11",
-        /* Audio output */
-        "--socket=pulseaudio",
-        /* We want full fs access */
+        "--socket=wayland",
+        /* We need to access and store files */
         "--filesystem=home",
-        /* Allow communication with network */
+        /* Allow communication with network to get content */
         "--share=network"
     ],
-    "cleanup": [ "/cache",
-                 "/share/aclocal",
-                 "/lib/systemd",
-                 "*.la", "*.a" ],
-    "build-options" : {
-        "cflags": "-O2 -g",
-        "cxxflags": "-O2 -g",
-        "env": {
-            "V": "1"
-        }
-    },
     "modules": [
     {
         "name": "libgsf",
-        "buildsystem": "autotools",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://ftp.gnome.org/pub/gnome/sources/libgsf/1.14/libgsf-1.14.41.tar.xz",
-                    "sha256": "150b98586a1021d5c49b3d4d065d0aa3e3674ae31db131af5372499d2d3f08d3"
-                }
-            ]
+        "sources": [
+            {
+                "type": "archive",
+                "url": "https://ftp.gnome.org/pub/gnome/sources/libgsf/1.14/libgsf-1.14.41.tar.xz",
+                "sha256": "150b98586a1021d5c49b3d4d065d0aa3e3674ae31db131af5372499d2d3f08d3"
+            }
+        ]
     },
     {
         "name": "gconf",
@@ -54,39 +41,6 @@
         ]
     },
     {
-        "name": "libsigc++",
-        "buildsystem": "autotools",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.10/libsigc++-2.10.0.tar.xz",
-                    "sha256": "f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81"
-                }
-            ]
-        },
-        {
-        "name": "glibmm",
-        "buildsystem": "autotools",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.51/glibmm-2.51.7.tar.xz",
-                    "sha256": "db67cc77f772fb8c727885b39ad6669ecb309cc72f7d76c25753a5c049dfb5f8"
-                }
-            ]
-        },
-    {
-        "name": "gconfmm",
-        "buildsystem": "autotools",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://ftp.gnome.org/pub/GNOME/sources/gconfmm/2.28/gconfmm-2.28.3.tar.xz",
-                    "sha256": "d7bd2d29c1a87b85329547fb29a0eca52d944e60699982152775002e24c09228"
-                }
-            ]
-        },
-    {
         "name": "biblesync",
         "buildsystem": "cmake",
             "sources": [
@@ -99,8 +53,7 @@
         },
     {
         "name": "sword",
-        "buildsystem": "autotools",
-            "sources": [
+        "sources": [
                 {
                     "type": "git",
                     "url": "https://github.com/bibletime/crosswire-sword-mirror.git",
@@ -110,76 +63,63 @@
         },
     {
         "name": "rarian",
-        "buildsystem": "autotools",
-            "sources": [
+        "sources": [
                 {
                     "type": "archive",
                     "url": "https://rarian.freedesktop.org/Releases/rarian-0.8.1.tar.bz2",
                     "sha256": "aafe886d46e467eb3414e91fa9e42955bd4b618c3e19c42c773026b205a84577"
                 }
             ]
-    },
-    {
-        "name": "libglade2",
-        "buildsystem": "autotools",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://ftp.gnome.org/pub/GNOME/sources/libglade/2.6/libglade-2.6.4.tar.bz2",
-                    "sha256": "64361e7647839d36ed8336d992fd210d3e8139882269bed47dc4674980165dec"
-                }
-            ]
-    },
+        },
     {
         "name": "gnome-doc-utils",
-        "buildsystem": "autotools",
-            "sources": [
+        "sources": [
                 {
                     "type": "archive",
                     "url": "http://ftp.gnome.org/pub/GNOME/sources/gnome-doc-utils/0.20/gnome-doc-utils-0.20.10.tar.xz",
                     "sha256": "cb0639ffa9550b6ddf3b62f3b1add92fb92ab4690d351f2353cffe668be8c4a6"
                 }
             ]
-        },
-        {
-            "name": "webkitgtk",
-            "config-opts": [ "--with-gtk=2.0", "--disable-webkit2", "--disable-geolocation", "--disable-video",
-                             "--disable-spellcheck", "--disable-credential-storage", "--disable-web-audio" ],
-            "build-options" : {
-                "env": {
-                    "PYTHON": "/usr/bin/python3"
-                },
-          "arch": {
-               "arm": {
-                    "config-opts": [ "--disable-jit" ]
-                    },
-                "aarch64": {
-                    "config-opts": [ "--disable-jit" ]
-                }
-            }
+    },
+    {
+        "name": "webkitgtk",
+        "config-opts": [ "--with-gtk=3.0", "--disable-webkit2", "--disable-geolocation", "--disable-video",
+                            "--disable-spellcheck", "--disable-credential-storage", "--disable-web-audio" ],
+        "build-options" : {
+            "env": {
+                "PYTHON": "/usr/bin/python3"
             },
-            "cleanup": [ "/share/doc", "/bin" ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://www.webkitgtk.org/releases/webkitgtk-2.4.11.tar.xz",
-                    "sha256": "588aea051bfbacced27fdfe0335a957dca839ebe36aa548df39c7bbafdb65bf7"
+        "arch": {
+            "arm": {
+                "config-opts": [ "--disable-jit" ]
                 },
-                {
-                    "type": "patch",
-                    "path": "webkitgtk-2.4.9-abs.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "webkitgtk-2.4.11.patch"
-                }
-            ]
+            "aarch64": {
+                "config-opts": [ "--disable-jit" ]
+            }
+        }
         },
+        "cleanup": [ "/share/doc", "/bin" ],
+        "sources": [
+            {
+                "type": "archive",
+                "url": "https://www.webkitgtk.org/releases/webkitgtk-2.4.11.tar.xz",
+                "sha256": "588aea051bfbacced27fdfe0335a957dca839ebe36aa548df39c7bbafdb65bf7"
+            },
+            {
+                "type": "patch",
+                "path": "webkitgtk-2.4.9-abs.patch"
+            },
+            {
+                "type": "patch",
+                "path": "webkitgtk-2.4.11.patch"
+            }
+        ]
+    },
     {
         "name": "xiphos",
         "buildsystem": "simple",
         "build-commands": [
-            "./waf configure --prefix=/app --enable-webkit-editor --gtk=2 --debug-level=release",
+            "./waf configure --prefix=/app --enable-webkit-editor --enable-webkit2 --gtk=3 --debug-level=release",
             "./waf build",
             "./waf install"
         ],
