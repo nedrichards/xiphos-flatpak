@@ -40,8 +40,8 @@
                     "sha256": "150b98586a1021d5c49b3d4d065d0aa3e3674ae31db131af5372499d2d3f08d3"
                 }
             ]
-        },
-        {
+    },
+    {
             "name": "gconf",
             "config-opts": [ "--disable-static", "--disable-gtk-doc", "--disable-orbit",
                              "--disable-introspection" ],
@@ -74,9 +74,9 @@
                     "commit": "6700c733b06e971ec5eba671369f086a81bbb95c"
                 }
             ]
-        },
+    },
     {
-            "name": "rarian",
+        "name": "rarian",
         "buildsystem": "autotools",
             "sources": [
                 {
