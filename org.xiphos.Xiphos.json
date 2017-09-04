@@ -1,6 +1,5 @@
 {
-    "id": "com.github.crosswire.Xiphos",
-    "base-version": "master",
+    "id": "org.xiphos.Xiphos",
     "runtime": "org.gnome.Platform",
     "runtime-version": "3.24",
     "sdk": "org.gnome.Sdk",
@@ -63,11 +62,20 @@
     },
     {
         "name": "rarian",
+        "rm-configure": "true",
         "sources": [
                 {
                     "type": "archive",
                     "url": "https://rarian.freedesktop.org/Releases/rarian-0.8.1.tar.bz2",
                     "sha256": "aafe886d46e467eb3414e91fa9e42955bd4b618c3e19c42c773026b205a84577"
+                },
+                {
+                "type": "script",
+                "path": "autogen.sh",
+                "commands": [
+                    "cp -p /usr/share/automake-*/config.{sub,guess} .",
+                    "autoconf -f -B build/autoconf_prepend-include"
+                ]
                 }
             ]
     },
