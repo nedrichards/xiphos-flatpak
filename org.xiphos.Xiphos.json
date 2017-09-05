@@ -16,6 +16,7 @@
         /* Allow communication with network to get content */
         "--share=network"
     ],
+    "cleanup": ["/include", "*.la", "/lib/pkgconfig", "/share/gtk-doc", "/share/pkgconfig"],
     "modules": [
     {
         "name": "libgsf",
